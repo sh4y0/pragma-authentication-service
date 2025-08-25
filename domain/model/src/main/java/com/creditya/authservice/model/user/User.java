@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -17,7 +18,7 @@ public class User {
     private UUID userId;
     private String name;
     private String lastName;
-    private String birthdate;
+    private LocalDate birthdate;
     private String phone;
     private String address;
     private String email;

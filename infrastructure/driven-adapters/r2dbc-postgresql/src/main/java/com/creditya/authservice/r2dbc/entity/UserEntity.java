@@ -6,6 +6,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Table("users")
@@ -20,7 +21,7 @@ public class UserEntity{
     private UUID userId;
     private String name;
     private String lastName;
-    private String birthdate;
+    private LocalDate birthdate;
     private String phone;
     private String address;
     private String email;

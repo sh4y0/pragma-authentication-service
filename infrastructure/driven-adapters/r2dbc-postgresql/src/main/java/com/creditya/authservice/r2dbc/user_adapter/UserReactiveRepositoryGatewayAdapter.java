@@ -25,5 +25,6 @@ public class UserReactiveRepositoryGatewayAdapter extends ReactiveAdapterOperati
     @Override
     public Mono<User> signUp(User user) {
         return this.repository.save(this.toData(user)).map(this::toEntity);
+
     }
 }

@@ -37,7 +37,6 @@ public class UseCasesConfig {
             TokenGateway tokenGateway,
             PasswordHasherGateway passwordHasherGateway,
             UseCaseLogger useCaseLogger
-            //AuthenticationGateway authenticationGateway
     ) {
         return new LoginUseCase(userRepositoryGateway,
                                 roleRepository,tokenGateway,

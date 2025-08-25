@@ -2,12 +2,14 @@ package com.creditya.authservice.api;
 
 import com.creditya.authservice.api.dto.request.UserLoginRequestDTO;
 import com.creditya.authservice.api.dto.request.UserSignUpRequestDTO;
+import com.creditya.authservice.api.dto.response.TokenDTO;
 import com.creditya.authservice.api.exception.model.UnexpectedException;
 import com.creditya.authservice.api.exception.service.ValidationService;
 import com.creditya.authservice.api.mapper.UserMapper;
 import com.creditya.authservice.usecase.authenticateuser.LoginUseCase;
 import com.creditya.authservice.usecase.authenticateuser.SignUpUseCase;
 import com.creditya.authservice.usecase.authenticateuser.exception.BaseException;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,12 +49,19 @@ public class Handler {
                 .flatMap(validationService::validate)
                 .map(userMapper::dtoSignUpToDomain)
                 .flatMap(signUpUseCase::signUp)
-                .map(userMapper::domainToDtoSignUp)
-                .flatMap(responseDto -> ServerResponse
+                .then(ServerResponse
                         .created(URI.create("/api/v1/users"))
-                        .build())
+                        .build()
+                )
                 .onErrorResume(ex -> Mono.error(
                         ex instanceof BaseException ? ex : new UnexpectedException(ex)
                 ));
+    }
+
+    public void signUpDoc(UserSignUpRequestDTO dto) {}
+    public Mono<TokenDTO> signInDoc(
+            @RequestBody(description = "Sign In - Credentials for user login")
+            UserLoginRequestDTO dto) {
+        return Mono.empty();
     }
 }
