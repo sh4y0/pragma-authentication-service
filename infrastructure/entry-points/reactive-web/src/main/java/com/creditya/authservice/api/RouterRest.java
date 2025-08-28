@@ -108,12 +108,14 @@ public class RouterRest {
                                                     mediaType = "application/json",
                                                     schema = @Schema(
                                                             implementation = TokenDTO.class,
-                                                            example = "{\n" +
-                                                                    "  \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n" +
-                                                                    "  \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n" +
-                                                                    "  \"tokenType\": \"Bearer\",\n" +
-                                                                    "  \"expiresIn\": 3600\n" +
-                                                                    "}"
+                                                            example =  """
+                                                                        {
+                                                                          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                                                                          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                                                                          "tokenType": "Bearer",
+                                                                          "expiresIn": 3600
+                                                                        }
+                                                                        """
                                                     )
                                             )
                                     ),

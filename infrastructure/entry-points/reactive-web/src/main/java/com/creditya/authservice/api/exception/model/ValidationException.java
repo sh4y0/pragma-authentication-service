@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Getter
 public class ValidationException extends BaseException {
-    private final static ErrorCatalog error = ErrorCatalog.VALIDATION_EXCEPTION;
+    private static final ErrorCatalog error = ErrorCatalog.VALIDATION_EXCEPTION;
 
     public ValidationException(Map<String, String> errors) {
         super(

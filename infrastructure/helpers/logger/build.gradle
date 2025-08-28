@@ -2,4 +2,8 @@ dependencies {
     implementation project(':model')
     implementation 'org.springframework:spring-context'
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
+
+    testImplementation("com.github.valfirst:slf4j-test:3.0.3") {
+        exclude group: "ch.qos.logback", module: "logback-classic"
+    }
 }

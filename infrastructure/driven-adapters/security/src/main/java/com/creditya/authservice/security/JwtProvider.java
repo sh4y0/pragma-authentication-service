@@ -13,14 +13,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtProvider {
 
     private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
     private static final long TOKEN_EXPIRATION = 1000 * 60 * 60 * 24;
-    private static final long REFRESH_WINDOW = 1000 * 60 * 60 * 24 * 7;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -41,7 +39,7 @@ public class JwtProvider {
     ) {
         extraClaims.put("roles", userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList()));
+                .toList());
 
         return Jwts
                 .builder()

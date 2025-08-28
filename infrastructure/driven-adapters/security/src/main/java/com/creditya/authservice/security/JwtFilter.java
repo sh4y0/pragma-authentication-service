@@ -75,6 +75,5 @@ public class JwtFilter implements WebFilter {
                     return chain.filter(exchange)
                             .contextWrite(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(context)));
                 });
-                //.switchIfEmpty(chain.filter(exchange));
     }
 }

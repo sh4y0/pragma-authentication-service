@@ -2,10 +2,11 @@ package com.creditya.authservice.api.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
+@Builder
 @Schema(name = "UserSignUpRequestDTO", description = "Data required for user registration")
 public record UserSignUpRequestDTO(
                                    @NotBlank(message = "Name cannot be blank")
@@ -15,14 +16,22 @@ public record UserSignUpRequestDTO(
                                     @NotBlank(message = "Last name cannot be blank")
                                     String lastName,
                                    @Schema(description = "User's birthday", example = "1997-05-18")
-                                    LocalDate birthdate,
+                                   @NotBlank(message = "Birthdate is required")
+                                   @Pattern(
+                                           regexp = "^\\d{4}-\\d{2}-\\d{2}$",
+                                           message = "Invalid date format. Please use yyyy-MM-dd"
+                                   )
+                                    String birthdate,
                                    @Schema(description = "User's phone number", example = "95655256")
                                     String phone,
                                    @Schema(description = "User's address", example = "Miraflores, Lima, Peru")
                                     String address,
 
                                     @NotBlank(message = "Email cannot be blank")
-                                    @Email(message = "A valid email address is required")
+                                   @Pattern(
+                                           regexp = "^(?!.*\\.\\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+                                           message = "Email format is invalid"
+                                   )
                                    @Schema(description = "User's Email", example = "gutierrezherrada@gmail.com")
                                     String email,
 

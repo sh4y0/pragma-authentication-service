@@ -7,7 +7,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
-// TODO: This file is just an example, you should delete or modify it
 public interface UserReactiveRepository extends ReactiveCrudRepository<UserEntity, UUID>, ReactiveQueryByExampleExecutor<UserEntity> {
     Mono<UserEntity> findByEmail(String email);
 }

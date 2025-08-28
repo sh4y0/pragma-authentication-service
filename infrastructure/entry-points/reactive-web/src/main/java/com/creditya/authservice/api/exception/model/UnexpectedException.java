@@ -5,7 +5,7 @@ import com.creditya.authservice.usecase.authenticateuser.exception.BaseException
 import com.creditya.authservice.usecase.authenticateuser.utils.ErrorCatalog;
 
 public class UnexpectedException extends BaseException {
-    private final static ErrorCatalog error = ErrorCatalog.INTERNAL_SERVER_ERROR;
+    private static final ErrorCatalog error = ErrorCatalog.INTERNAL_SERVER_ERROR;
 
     public UnexpectedException(Throwable cause) {
         super(

@@ -39,7 +39,6 @@ class RoleReactiveRepositoryAdapterTest {
 
     @BeforeEach
     void setUp() {
-        // Arrange: Create common sample objects for tests
         sampleRoleEntity = RoleEntity.builder()
                 .roleId(roleId)
                 .name("CUSTOMER")
@@ -56,15 +55,11 @@ class RoleReactiveRepositoryAdapterTest {
     @Test
     @DisplayName("findByName should return a Role when it exists")
     void findByName_whenRoleExists_shouldReturnRole() {
-        // Arrange: Mock the repository to return a role entity
         when(repository.findByName("CUSTOMER")).thenReturn(Mono.just(sampleRoleEntity));
-        // Arrange: Mock the mapper to convert the entity to a domain object
         when(mapper.map(sampleRoleEntity, Role.class)).thenReturn(sampleRole);
 
-        // Act: Call the adapter method
         Mono<Role> result = roleAdapter.findByName("CUSTOMER");
 
-        // Assert: Use StepVerifier to validate the reactive stream
         StepVerifier.create(result)
                 .expectNextMatches(role -> {
                     assert role.getRoleId().equals(roleId);
@@ -77,13 +72,10 @@ class RoleReactiveRepositoryAdapterTest {
     @Test
     @DisplayName("findByName should return Mono.empty when role does not exist")
     void findByName_whenRoleDoesNotExist_shouldReturnEmpty() {
-        // Arrange: Mock the repository to return an empty Mono
         when(repository.findByName(anyString())).thenReturn(Mono.empty());
 
-        // Act: Call the adapter method
         Mono<Role> result = roleAdapter.findByName("NON_EXISTENT_ROLE");
 
-        // Assert: Verify that the stream completes without emitting any items
         StepVerifier.create(result)
                 .verifyComplete();
     }
@@ -91,15 +83,11 @@ class RoleReactiveRepositoryAdapterTest {
     @Test
     @DisplayName("findByRoleId should return a Role when it exists")
     void findByRoleId_whenRoleExists_shouldReturnRole() {
-        // Arrange: Mock the repository to return a role entity by its ID
         when(repository.findById(roleId)).thenReturn(Mono.just(sampleRoleEntity));
-        // Arrange: Mock the mapper
         when(mapper.map(sampleRoleEntity, Role.class)).thenReturn(sampleRole);
 
-        // Act: Call the adapter method
         Mono<Role> result = roleAdapter.findByRoleId(roleId);
 
-        // Assert: Validate the emitted role
         StepVerifier.create(result)
                 .expectNext(sampleRole)
                 .verifyComplete();
@@ -108,13 +96,10 @@ class RoleReactiveRepositoryAdapterTest {
     @Test
     @DisplayName("findByRoleId should return Mono.empty when role does not exist")
     void findByRoleId_whenRoleDoesNotExist_shouldReturnEmpty() {
-        // Arrange: Mock the repository to return an empty Mono for any UUID
         when(repository.findById(any(UUID.class))).thenReturn(Mono.empty());
 
-        // Act: Call the adapter method with a non-existent ID
         Mono<Role> result = roleAdapter.findByRoleId(UUID.randomUUID());
 
-        // Assert: Verify that the stream is empty
         StepVerifier.create(result)
                 .expectNextCount(0)
                 .verifyComplete();

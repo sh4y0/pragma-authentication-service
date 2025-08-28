@@ -1,11 +1,13 @@
 package com.creditya.authservice.usecase.authenticateuser.exception;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
 @Getter
+@Setter
 public class BaseException extends RuntimeException {
     private final String errorCode;
     private final String title;
@@ -14,7 +16,7 @@ public class BaseException extends RuntimeException {
     private final LocalDateTime timestamp;
     private final Map<String, String> errors;
 
-    protected BaseException(String errorCode, String title, String message, int status, Map<String, String> errors) {
+    public BaseException(String errorCode, String title, String message, int status, Map<String, String> errors) {
         super(message);
         this.errorCode = errorCode;
         this.title = title;

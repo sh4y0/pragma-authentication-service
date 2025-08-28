@@ -8,6 +8,14 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 public enum ErrorCatalog {
+    TOKEN_INVALID("AUTH-TOKEN-CREDENTIALS",
+            "Token Invalid",
+            "The token is invalid",
+            401,
+            Map.of("token", "The token is invalid")
+
+
+    ),
     INVALID_CREDENTIALS(
             "AUTH-INVALID-CREDENTIALS",
             "Invalid Credentials",

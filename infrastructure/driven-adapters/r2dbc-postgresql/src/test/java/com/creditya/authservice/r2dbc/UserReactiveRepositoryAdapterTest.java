@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reactivecommons.utils.ObjectMapper;
@@ -30,6 +31,7 @@ class UserReactiveRepositoryAdapterTest {
     @Mock
     private ObjectMapper mapper;
 
+    @InjectMocks
     private UserReactiveRepositoryGatewayAdapter adapter;
 
     private User testUser;
@@ -40,7 +42,6 @@ class UserReactiveRepositoryAdapterTest {
 
     @BeforeEach
     void setUp() {
-        adapter = new UserReactiveRepositoryGatewayAdapter(repository, mapper);
 
         testUser = User.builder()
                 .userId(testUserId)
@@ -114,7 +115,6 @@ class UserReactiveRepositoryAdapterTest {
     void shouldSignUpUserSuccessfully() {
         when(mapper.map(testUser, UserEntity.class)).thenReturn(testUserEntity);
         when(repository.save(testUserEntity)).thenReturn(Mono.just(testUserEntity));
-        when(mapper.map(testUserEntity, User.class)).thenReturn(testUser);
 
         StepVerifier.create(adapter.signUp(testUser))
                 .expectNext(testUser)
@@ -122,7 +122,6 @@ class UserReactiveRepositoryAdapterTest {
 
         verify(mapper).map(testUser, UserEntity.class);
         verify(repository).save(testUserEntity);
-        verify(mapper).map(testUserEntity, User.class);
     }
 
     @Test
@@ -162,7 +161,6 @@ class UserReactiveRepositoryAdapterTest {
         RuntimeException mappingException = new RuntimeException("Mapping error");
         when(mapper.map(testUser, UserEntity.class)).thenThrow(mappingException);
 
-        // When & Then
         StepVerifier.create(adapter.signUp(testUser))
                 .expectError(RuntimeException.class)
                 .verify();

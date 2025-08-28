@@ -11,6 +11,8 @@ import com.creditya.authservice.usecase.authenticateuser.exception.UserAlreadyEx
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import static com.creditya.authservice.usecase.authenticateuser.utils.ROLE.CUSTOMER;
+
 @RequiredArgsConstructor
 public class SignUpUseCase {
     private final UserRepositoryGateway userRepositoryGateway;
@@ -26,14 +28,14 @@ public class SignUpUseCase {
                 userRepositoryGateway.findByEmail(user.getEmail())
                         .hasElement()
                         .flatMap(userExists -> {
-                            if (userExists) {
+                            if (Boolean.TRUE.equals(userExists)) {
                                 useCaseLogger.trace("User already exists: " + user.getEmail());
                                 return Mono.error(new UserAlreadyExistsException());
                             }
 
                             useCaseLogger.trace("User does not exist, checking CUSTOMER role...");
 
-                            return roleRepository.findByName("CUSTOMER")
+                            return roleRepository.findByName(CUSTOMER.toString())
                                     .switchIfEmpty(Mono.defer(() -> {
                                         useCaseLogger.trace("Role CUSTOMER not found for sign-up");
                                         return Mono.error(new RoleNotFoundException());
