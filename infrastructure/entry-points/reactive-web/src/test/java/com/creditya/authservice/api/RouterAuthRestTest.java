@@ -1,7 +1,5 @@
-package com.creditya.authservice.api.config;
+package com.creditya.authservice.api;
 
-import com.creditya.authservice.api.Handler;
-import com.creditya.authservice.api.RouterRest;
 import com.creditya.authservice.api.exception.GlobalExceptionFilter;
 import com.creditya.authservice.api.dto.request.UserLoginRequestDTO;
 import com.creditya.authservice.api.dto.request.UserSignUpRequestDTO;
@@ -30,9 +28,9 @@ import java.math.BigDecimal;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = {RouterRest.class, Handler.class, GlobalExceptionFilter.class})
+@ContextConfiguration(classes = {RouterAuthRest.class, HandlerAuth.class, GlobalExceptionFilter.class})
 @WebFluxTest
-class RouterRestTest {
+class RouterAuthRestTest {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -70,9 +68,9 @@ class RouterRestTest {
         loginRequest = new UserLoginRequestDTO("john.doe@example.com", "password123");
         tokenDTO = new TokenDTO("access-token");
 
-        Handler handler = new Handler(userMapper, loginUseCase, signUpUseCase, validationService);
+        HandlerAuth handlerAuth = new HandlerAuth(userMapper, loginUseCase, signUpUseCase, validationService);
         webTestClient = WebTestClient.bindToRouterFunction(
-                new RouterRest().routerFunction(handler, new GlobalExceptionFilter(useCaseLogger))
+                new RouterAuthRest().routerFunction(handlerAuth, new GlobalExceptionFilter(useCaseLogger))
         ).build();
     }
 

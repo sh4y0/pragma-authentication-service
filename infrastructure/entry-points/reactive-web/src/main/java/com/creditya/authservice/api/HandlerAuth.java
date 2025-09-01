@@ -19,11 +19,9 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
-
 @Component
 @RequiredArgsConstructor
-public class Handler {
+public class HandlerAuth {
 
     private final UserMapper userMapper;
     private final LoginUseCase loginUseCase;
@@ -33,7 +31,8 @@ public class Handler {
     public Mono<ServerResponse> logIn(ServerRequest request) {
         return request.bodyToMono(UserLoginRequestDTO.class)
                 .flatMap(validationService::validate)
-                .flatMap( requestDto -> loginUseCase.authenticate(requestDto.email(), requestDto.password()))
+                .flatMap( requestDto -> loginUseCase.
+                        authenticate(requestDto.email(), requestDto.password()))
                 .map(userMapper::domainToDto)
                 .flatMap(tokenDto -> ServerResponse.status(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -49,10 +48,10 @@ public class Handler {
                 .flatMap(validationService::validate)
                 .map(userMapper::dtoSignUpToDomain)
                 .flatMap(signUpUseCase::signUp)
-                .then(ServerResponse
-                        .created(URI.create("/api/v1/users"))
-                        .build()
-                )
+                .map(userMapper::userToUserSignUpResponseDTO)
+                .flatMap(userSaved -> ServerResponse.status(HttpStatus.CREATED)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(userSaved))
                 .onErrorResume(ex -> Mono.error(
                         ex instanceof BaseException ? ex : new UnexpectedException(ex)
                 ));

@@ -11,7 +11,7 @@ import com.creditya.authservice.usecase.authenticateuser.exception.UserAlreadyEx
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import static com.creditya.authservice.usecase.authenticateuser.utils.ROLE.CUSTOMER;
+import static com.creditya.authservice.usecase.authenticateuser.utils.Role.CUSTOMER;
 
 @RequiredArgsConstructor
 public class SignUpUseCase {

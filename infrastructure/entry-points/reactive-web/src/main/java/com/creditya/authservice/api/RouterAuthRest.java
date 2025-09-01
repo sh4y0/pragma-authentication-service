@@ -18,17 +18,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
-public class RouterRest {
+public class RouterAuthRest {
     @Bean
     @RouterOperations({
             @RouterOperation(
                     path = "/api/v1/users",
                     method = RequestMethod.POST,
-                    beanClass = Handler.class,
+                    beanClass = HandlerAuth.class,
                     beanMethod = "signUpDoc",
                     operation = @Operation(
                             summary = "Register a new user",
@@ -87,7 +87,7 @@ public class RouterRest {
             @RouterOperation(
                     path = "/api/v1/login",
                     method = RequestMethod.POST,
-                    beanClass = Handler.class,
+                    beanClass = HandlerAuth.class,
                     beanMethod = "signInDoc",
                     operation = @Operation(
                             summary = "Login user",
@@ -144,9 +144,9 @@ public class RouterRest {
                     )
             )
     })
-    public RouterFunction<ServerResponse> routerFunction(Handler handler, GlobalExceptionFilter globalExceptionFilter) {
-        return route(POST("/api/v1/users"), handler::signUp)
-                .and(route(POST("/api/v1/login"), handler::logIn))
+    public RouterFunction<ServerResponse> routerFunction(HandlerAuth handlerAuth, GlobalExceptionFilter globalExceptionFilter) {
+        return route(POST("/api/v1/users"), handlerAuth::signUp)
+                .and(route(POST("/api/v1/login"), handlerAuth::logIn))
                 .filter(globalExceptionFilter);
     }
 }

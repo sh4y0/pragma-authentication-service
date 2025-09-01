@@ -1,6 +1,5 @@
-package com.creditya.authservice.api.config;
+package com.creditya.authservice.api;
 
-import com.creditya.authservice.api.HandlerAuth;
 import com.creditya.authservice.api.dto.request.UserLoginRequestDTO;
 import com.creditya.authservice.api.dto.request.UserSignUpRequestDTO;
 import com.creditya.authservice.api.dto.response.TokenDTO;

@@ -2,6 +2,8 @@ package com.creditya.authservice.api.mapper;
 
 import com.creditya.authservice.api.dto.response.TokenDTO;
 import com.creditya.authservice.api.dto.request.UserSignUpRequestDTO;
+import com.creditya.authservice.api.dto.response.UserResponseDTO;
+import com.creditya.authservice.api.dto.response.UserSignUpResponseDTO;
 import com.creditya.authservice.model.user.User;
 import com.creditya.authservice.model.user.UserToken;
 import org.mapstruct.Mapper;
@@ -11,5 +13,7 @@ import org.mapstruct.MappingConstants;
 public interface UserMapper {
 
     User dtoSignUpToDomain(UserSignUpRequestDTO dto);
+    UserSignUpResponseDTO userToUserSignUpResponseDTO(User user);
     TokenDTO domainToDto(UserToken userToken);
+    UserResponseDTO userResponseDTO(User user);
 }

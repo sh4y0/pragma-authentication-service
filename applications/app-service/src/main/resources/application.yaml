@@ -11,6 +11,11 @@ spring:
       path: "/h2"
   profiles:
     include: null
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: "http://localhost:8090/.well-known/jwks.json"
 logging:
   level:
     com.creditya.authservice: trace
@@ -38,3 +43,7 @@ adapters:
     schema: "public"
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+rsa:
+  key:
+    private-key: ${RSA_PRIVATE_KEY_PATH}
+    public-key: ${RSA_PUBLIC_KEY_PATH}

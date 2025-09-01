@@ -1,13 +1,9 @@
 package com.creditya.authservice.api.config;
 
-import com.creditya.authservice.api.service.AuthenticationService;
-import com.creditya.authservice.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -21,7 +17,6 @@ import org.springframework.security.web.server.context.NoOpServerSecurityContext
 @EnableReactiveMethodSecurity
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
-    private final AuthenticationService authenticationService;
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
@@ -34,11 +29,13 @@ public class SecurityConfig {
                         .pathMatchers(
                                 "/api/auth/**",
                                 "/api/v1/login",
+                                "/.well-known/jwks.json",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/proxy/**",
-                                "/actuator/**"
+                                "/actuator/**",
+                                "/api/v1/clients/by-ids"
                         ).permitAll()
                         .pathMatchers(HttpMethod.POST, "/api/v1/users").hasAnyAuthority("ROLE_ADMIN", "ROLE_ADVISER")
                         .anyExchange().authenticated()
@@ -46,14 +43,6 @@ public class SecurityConfig {
                 .addFilterAt(jwtFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .addFilterAfter(new SecurityHeadersConfig(), SecurityWebFiltersOrder.AUTHENTICATION)
                 .build();
-    }
-
-    @Bean
-    public ReactiveAuthenticationManager authenticationManager() {
-        UserDetailsRepositoryReactiveAuthenticationManager authManager =
-                new UserDetailsRepositoryReactiveAuthenticationManager(authenticationService);
-        authManager.setPasswordEncoder(passwordEncoder());
-        return authManager;
     }
 
     @Bean

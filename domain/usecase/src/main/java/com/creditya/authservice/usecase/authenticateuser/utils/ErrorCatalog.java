@@ -8,6 +8,13 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 public enum ErrorCatalog {
+    USERS_NOT_FOUND(
+            "USERS-NOT-FOUND",
+            "Users Not Found",
+            "One or more users could not be retrieved from Auth service",
+            404,
+            Map.of("userIds", "List of user IDs not found")
+    ),
     TOKEN_INVALID("AUTH-TOKEN-CREDENTIALS",
             "Token Invalid",
             "The token is invalid",

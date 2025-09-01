@@ -1,5 +1,5 @@
 package com.creditya.authservice.usecase.authenticateuser.utils;
 
-public enum ROLE {
+public enum Role {
     CUSTOMER
 }
