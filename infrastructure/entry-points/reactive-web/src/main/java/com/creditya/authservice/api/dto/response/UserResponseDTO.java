@@ -15,6 +15,9 @@ public record UserResponseDTO(
         @Schema(description = "User's LastName", example = "Gutierrez")
         String lastName,
 
+        @Schema(description = "User's DNI", example = "61070025")
+        String dni,
+
         @Schema(description = "User's birthday", example = "1997-05-18")
         String birthdate,
 

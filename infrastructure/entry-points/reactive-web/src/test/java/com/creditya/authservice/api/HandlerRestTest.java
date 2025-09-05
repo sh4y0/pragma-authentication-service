@@ -3,6 +3,7 @@ package com.creditya.authservice.api;
 import com.creditya.authservice.api.dto.request.UserLoginRequestDTO;
 import com.creditya.authservice.api.dto.request.UserSignUpRequestDTO;
 import com.creditya.authservice.api.dto.response.TokenDTO;
+import com.creditya.authservice.api.dto.response.UserSignUpResponseDTO;
 import com.creditya.authservice.api.exception.GlobalExceptionFilter;
 import com.creditya.authservice.api.exception.model.UnexpectedException;
 import com.creditya.authservice.api.exception.service.ValidationService;
@@ -31,7 +32,6 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.math.BigDecimal;
-import java.net.URI;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
@@ -56,6 +56,7 @@ class HandlerRestTest {
     private UserToken userToken;
     private TokenDTO tokenDTO;
     private UserSignUpRequestDTO signUpRequest;
+    private UserSignUpResponseDTO signUpResponse;
     private User userDomain;
     private GlobalExceptionFilter globalExceptionFilter;
 
@@ -65,10 +66,19 @@ class HandlerRestTest {
         userToken = new UserToken("some_jwt_token");
         tokenDTO = new TokenDTO("some_jwt_token");
         signUpRequest = new UserSignUpRequestDTO(
-                "John", "Doe", "1990-01-01", "1234567890", "123 Main St",
+                "John", "Doe", "61083587T","1990-01-01", "1234567890", "123 Main St",
                 "john.doe@example.com", "password", new BigDecimal("1000.0")
         );
-        userDomain = new User(UUID.randomUUID(), "John", "Doe",
+        signUpResponse = new UserSignUpResponseDTO("John",
+                "Doe",
+                "61083587T",
+                "1990-01-01",
+                "1234567890",
+                "123 Main St",
+                "john.doe@example.com",
+                new BigDecimal("1000.00"));
+
+        userDomain = new User(UUID.randomUUID(), "John", "Doe","61083587T",
                 LocalDate.parse("1990-01-01"), "1234567890", "123 Main St",
                 "john.doe@example.com", "password", new BigDecimal("1000.0"), UUID.randomUUID());
 
@@ -146,16 +156,14 @@ class HandlerRestTest {
     void signUp_success() {
         when(validationService.validate(signUpRequest)).thenReturn(Mono.just(signUpRequest));
         when(userMapper.dtoSignUpToDomain(signUpRequest)).thenReturn(userDomain);
-        when(signUpUseCase.signUp(userDomain)).thenReturn(Mono.empty());
+        when(signUpUseCase.signUp(userDomain)).thenReturn(Mono.just(userDomain));
+        when(userMapper.userToUserSignUpResponseDTO(userDomain)).thenReturn(signUpResponse);
 
         StepVerifier.create(handlerAuth.signUp(mockRequest(signUpRequest)))
-                .expectNextMatches(res -> {
+                .assertNext(res -> {
                     assertEquals(HttpStatus.CREATED, res.statusCode());
-                    assertEquals(URI.create("/api/v1/users"), res.headers().getLocation());
-                    return true;
                 })
-                .expectComplete()
-                .verify();
+                .verifyComplete();
 
         verifySignUpInteractions();
     }

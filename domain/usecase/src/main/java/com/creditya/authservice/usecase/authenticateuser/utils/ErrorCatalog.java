@@ -8,6 +8,23 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 public enum ErrorCatalog {
+
+    FORBIDDEN(
+            "FORBIDDEN",
+            "Forbidden",
+            "You do not have permission to access this resource.",
+            403,
+            Map.of("auth", "Access denied - insufficient permissions")
+    ),
+
+    UNAUTHORIZED(
+            "UNAUTHORIZED",
+            "Unauthorized",
+            "Authentication failed. Please provide a valid token.",
+            401,
+            Map.of("auth", "Missing, invalid, or expired authentication token")
+    ),
+
     USERS_NOT_FOUND(
             "USERS-NOT-FOUND",
             "Users Not Found",

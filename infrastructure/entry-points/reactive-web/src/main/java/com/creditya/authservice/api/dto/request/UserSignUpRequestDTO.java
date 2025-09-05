@@ -15,6 +15,15 @@ public record UserSignUpRequestDTO(
                                    @Schema(description = "User's LastName", example = "Gutierrez")
                                     @NotBlank(message = "Last name cannot be blank")
                                     String lastName,
+
+                                   @NotBlank(message = "DNI cannot be blank")
+                                   @Pattern(
+                                           regexp = "^[0-9]{8}[A-Za-z]$",
+                                           message = "DNI must contain exactly 8 digits followed by a letter"
+                                   )
+                                   @Schema(description = "National ID (DNI) of the applicant", example = "12345678Z")
+                                   String dni,
+
                                    @Schema(description = "User's birthday", example = "1997-05-18")
                                    @NotBlank(message = "Birthdate is required")
                                    @Pattern(

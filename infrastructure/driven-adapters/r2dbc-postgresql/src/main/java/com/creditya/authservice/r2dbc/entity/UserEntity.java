@@ -21,6 +21,7 @@ public class UserEntity{
     private UUID userId;
     private String name;
     private String lastName;
+    private String dni;
     private LocalDate birthdate;
     private String phone;
     private String address;

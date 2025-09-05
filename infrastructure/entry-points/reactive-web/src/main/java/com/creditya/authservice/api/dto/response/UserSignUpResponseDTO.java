@@ -10,6 +10,9 @@ public record UserSignUpResponseDTO(
         @Schema(description = "User's LastName", example = "Gutierrez")
         String lastName,
 
+        @Schema(description = "User's DNI", example = "61070032")
+        String dni,
+
         @Schema(description = "User's birthday", example = "1997-05-18")
         String birthdate,
 

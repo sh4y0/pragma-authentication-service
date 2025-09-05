@@ -1,5 +1,6 @@
 package com.creditya.authservice.api;
 
+import com.creditya.authservice.api.dto.response.UserSignUpResponseDTO;
 import com.creditya.authservice.api.exception.GlobalExceptionFilter;
 import com.creditya.authservice.api.dto.request.UserLoginRequestDTO;
 import com.creditya.authservice.api.dto.request.UserSignUpRequestDTO;
@@ -51,6 +52,7 @@ class RouterAuthRestTest {
     private UseCaseLogger useCaseLogger;
 
     private UserSignUpRequestDTO signUpRequest;
+    private UserSignUpResponseDTO signUpResponse;
     private UserLoginRequestDTO loginRequest;
     private TokenDTO tokenDTO;
 
@@ -58,11 +60,21 @@ class RouterAuthRestTest {
     void setUp() {
         signUpRequest = new UserSignUpRequestDTO("John",
                 "Doe",
+                "61083587T",
                 "1990-01-01",
                 "1234567890",
                 "123 Main St",
                 "john.doe@example.com",
                 "password123",
+                new BigDecimal("1000.00"));
+
+        signUpResponse = new UserSignUpResponseDTO("John",
+                "Doe",
+                "61083587T",
+                "1990-01-01",
+                "1234567890",
+                "123 Main St",
+                "john.doe@example.com",
                 new BigDecimal("1000.00"));
 
         loginRequest = new UserLoginRequestDTO("john.doe@example.com", "password123");
@@ -80,15 +92,19 @@ class RouterAuthRestTest {
                 .thenReturn(Mono.just(signUpRequest));
         when(userMapper.dtoSignUpToDomain(any(UserSignUpRequestDTO.class)))
                 .thenReturn(new User());
-        when(signUpUseCase.signUp(any()))
-                .thenReturn(Mono.empty());
+        when(signUpUseCase.signUp(any(User.class)))
+                .thenReturn(Mono.just(new User()));
+        when(userMapper.userToUserSignUpResponseDTO(any(User.class)))
+                .thenReturn(signUpResponse);
 
         webTestClient.post()
                 .uri("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(signUpRequest)
                 .exchange()
-                .expectStatus().isCreated();
+                .expectStatus().isCreated()
+                .expectBody()
+                .jsonPath("$.email").isEqualTo("john.doe@example.com");
     }
 
     @Test
