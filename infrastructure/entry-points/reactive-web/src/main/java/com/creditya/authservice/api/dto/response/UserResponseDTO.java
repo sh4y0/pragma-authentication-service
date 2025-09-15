@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public record UserResponseDTO(
-
+        @Schema(description = "User's UUID", example = "111111-22222-33333-44444")
         UUID userId,
 
         @Schema(description = "User's Name", example = "Rodri")

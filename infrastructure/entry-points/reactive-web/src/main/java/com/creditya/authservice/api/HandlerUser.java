@@ -2,6 +2,7 @@ package com.creditya.authservice.api;
 
 import com.creditya.authservice.api.mapper.UserMapper;
 import com.creditya.authservice.usecase.authenticateuser.GetAllClientsUseCase;
+import com.creditya.authservice.usecase.authenticateuser.GetClientByIdUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class HandlerUser {
     private final UserMapper userMapper;
     private final GetAllClientsUseCase getAllClientsUseCase;
+    private final GetClientByIdUseCase getClientByIdUseCase;
 
     public Mono<ServerResponse> getUsersByIds(ServerRequest request) {
         return request.bodyToMono(new ParameterizedTypeReference<List<UUID>>() {})
@@ -27,5 +29,20 @@ public class HandlerUser {
                 .flatMap(users -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(users));
+    }
+
+    public Mono<ServerResponse> getUserById(ServerRequest request) {
+        return Mono.fromCallable(() -> UUID.fromString(request.pathVariable("userId")))
+                .flatMap(getClientByIdUseCase::getUserById)
+                .map(userMapper::userResponseDTO)
+                .flatMap(userDto -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(userDto))
+                .switchIfEmpty(ServerResponse.notFound().build())
+                .onErrorResume(IllegalArgumentException.class, e ->
+                        ServerResponse.badRequest()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue("{\"error\": \"Invalid UUID format\"}")
+                );
     }
 }

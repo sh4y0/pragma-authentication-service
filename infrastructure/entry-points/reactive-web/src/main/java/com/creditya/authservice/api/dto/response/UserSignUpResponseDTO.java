@@ -2,8 +2,12 @@ package com.creditya.authservice.api.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public record UserSignUpResponseDTO(
+        @Schema(description = "User's UUID", example = "111111-22222-33333-44444")
+        UUID userId,
+
         @Schema(description = "User's Name", example = "Rodri")
         String name,
 

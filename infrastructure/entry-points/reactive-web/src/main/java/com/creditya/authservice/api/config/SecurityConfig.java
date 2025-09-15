@@ -2,7 +2,6 @@ package com.creditya.authservice.api.config;
 
 import com.creditya.authservice.api.exception.CustomAccessDeniedHandler;
 import com.creditya.authservice.api.exception.CustomAuthenticationEntryPoint;
-import com.creditya.authservice.model.utils.gateways.UseCaseLogger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,8 +30,6 @@ import java.security.interfaces.RSAPublicKey;
 @EnableReactiveMethodSecurity
 public class SecurityConfig {
 
-    private final UseCaseLogger useCaseLogger;
-
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http,
                                                             CustomAccessDeniedHandler accessDeniedHandler,
@@ -52,7 +49,7 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/proxy/**",
                                 "/actuator/**",
-                                "/api/v1/clients/by-ids"
+                                "/api/v1/clients/**"
                         ).permitAll()
                         .pathMatchers(HttpMethod.POST, "/api/v1/users").hasAnyAuthority("ROLE_ADMIN", "ROLE_ADVISER")
                         .anyExchange().authenticated()

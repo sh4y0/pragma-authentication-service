@@ -27,6 +27,11 @@ public class UserReactiveRepositoryGatewayAdapter extends ReactiveAdapterOperati
     }
 
     @Override
+    public Mono<User> getUsersById(UUID userId) {
+        return this.repository.findById(userId).map(this::toEntity);
+    }
+
+    @Override
     public Mono<User> findByEmail(String email) {
         return  this.repository.findByEmail(email).map(this::toEntity);
     }
@@ -35,7 +40,7 @@ public class UserReactiveRepositoryGatewayAdapter extends ReactiveAdapterOperati
     public Mono<User> signUp(User user) {
         return Mono.fromCallable(() -> this.toData(user))
                 .flatMap(userEntity -> this.repository.save(userEntity))
-                .map(saved -> user);
+                .map(this::toEntity);
                 //this.repository.save(this.toData(user)).map(this::toEntity);
 
     }

@@ -9,8 +9,6 @@ spring:
     console:
       enabled: true
       path: "/h2"
-  profiles:
-    include: null
 logging:
   level:
     com.creditya.authservice: trace
@@ -30,15 +28,41 @@ management:
         enabled: true
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080"
+rsa:
+  key:
+    private-key: classpath:keys/private_key.pem
+    public-key: classpath:keys/public_key.pem
+
+---
+# ===============================================
+# PERFIL 'default' (para desarrollo local)
+# ===============================================
+spring:
+  config:
+    activate:
+      on-profile: default
 adapters:
   r2dbc:
     host: "localhost"
     port: 5432
     database: "auth_db"
     schema: "public"
+    username: "postgres"
+    password: "Sh4y0202597."
+
+---
+# ===============================================
+# PERFIL 'docker' (para Docker Compose)
+# ===============================================
+spring:
+  config:
+    activate:
+      on-profile: docker
+adapters:
+  r2dbc:
+    host: ${DB_HOST}
+    port: ${DB_PORT}
+    database: ${DB_NAME}
+    schema: "public"
     username: ${DB_USER}
     password: ${DB_PASSWORD}
-rsa:
-  key:
-    private-key: ${RSA_PRIVATE_KEY_PATH}
-    public-key: ${RSA_PUBLIC_KEY_PATH}

@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PostgresqlConnectionPropertiesTest {
+class MysqlConnectionPropertiesTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withUserConfiguration(TestConfig.class)
@@ -24,7 +24,7 @@ class PostgresqlConnectionPropertiesTest {
     @DisplayName("Should bind PostgreSQL connection properties correctly from configuration")
     void testPropertiesBinding() {
         contextRunner.run(context -> {
-            PostgresqlConnectionProperties props = context.getBean(PostgresqlConnectionProperties.class);
+            MysqlConnectionProperties props = context.getBean(MysqlConnectionProperties.class);
             assertThat(props.host()).isEqualTo("localhost");
             assertThat(props.port()).isEqualTo(5432);
             assertThat(props.database()).isEqualTo("testdb");
@@ -34,7 +34,7 @@ class PostgresqlConnectionPropertiesTest {
         });
     }
 
-    @EnableConfigurationProperties(PostgresqlConnectionProperties.class)
+    @EnableConfigurationProperties(MysqlConnectionProperties.class)
     static class TestConfig {
     }
 }

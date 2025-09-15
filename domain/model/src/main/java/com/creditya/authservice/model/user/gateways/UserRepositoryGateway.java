@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public interface UserRepositoryGateway {
     Flux<User> getUsersByIds(List<UUID> userIds);
+    Mono<User> getUsersById(UUID userId);
     Mono<User> findByEmail(String email);
     Mono<User> signUp(User user);
 
